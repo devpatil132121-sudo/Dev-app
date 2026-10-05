@@ -1,17 +1,332 @@
 <!DOCTYPE html>
-<html>
+<html lang="mr">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dev App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance Collection</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f1f5f9;
+  color:#172033;
+}
+.header{
+  background:#172554;
+  color:white;
+  padding:20px 16px;
+  text-align:center;
+}
+.header h1{margin:0;font-size:25px}
+.header p{margin:6px 0 0;opacity:.85}
+
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:15px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:15px;
+}
+.summary div{
+  background:white;
+  padding:12px 5px;
+  border-radius:12px;
+  text-align:center;
+  box-shadow:0 2px 8px #0001;
+}
+.summary b{
+  display:block;
+  font-size:19px;
+  margin-bottom:4px;
+}
+.summary span{font-size:12px}
+
+.card{
+  background:white;
+  padding:16px;
+  margin-bottom:15px;
+  border-radius:14px;
+  box-shadow:0 2px 8px #0001;
+}
+
+input,select,button{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border-radius:9px;
+  border:1px solid #cbd5e1;
+  font-size:15px;
+}
+
+button{
+  background:#172554;
+  color:white;
+  border:0;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.customer{
+  border-left:5px solid #172554;
+}
+.customer h3{
+  margin:0 0 10px;
+}
+.info{
+  margin:5px 0;
+  font-size:14px;
+}
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:15px;
+  background:#e0e7ff;
+  font-size:12px;
+  margin-top:5px;
+}
+.delete{
+  background:#b91c1c;
+}
+.clear{
+  background:#64748b;
+}
+</style>
 </head>
+
 <body>
 
-  <h1>Dev App</h1>
-  <p>My first app is ready!</p>
+<div class="header">
+  <h1>💼 Finance Collection</h1>
+  <p>Customer Recovery Management</p>
+</div>
 
-  <button onclick="alert('Hello Dev!')">
-    Click Me
+<div class="container">
+
+  <div class="summary">
+    <div>
+      <b id="totalCustomers">0</b>
+      <span>Customers</span>
+    </div>
+    <div>
+      <b id="totalPending">₹0</b>
+      <span>Total Pending</span>
+    </div>
+    <div>
+      <b id="totalPaid">₹0</b>
+      <span>Promise Amount</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>➕ Add Customer</h3>
+
+    <input id="name" placeholder="Customer Name">
+    <input id="mobile" type="tel" placeholder="Mobile Number">
+    <input id="pending" type="number" placeholder="Pending Amount ₹">
+    <input id="promise" type="number" placeholder="Promise Amount ₹">
+    <input id="date" type="date">
+
+    <select id="status">
+      <option value="Pending">Pending</option>
+      <option value="Promise">Promise</option>
+      <option value="Paid">Paid</option>
+      <option value="Vehicle Handover">Vehicle Handover</option>
+      <option value="Not Responding">Not Responding</option>
+    </select>
+
+    <button onclick="addCustomer()">SAVE CUSTOMER</button>
+  </div>
+
+  <div class="card">
+    <h3>🔎 Search Customer</h3>
+    <input
+      id="search"
+      placeholder="Customer name किंवा mobile..."
+      oninput="showCustomers()"
+    >
+  </div>
+
+  <div id="customerList"></div>
+
+  <button class="clear" onclick="clearAll()">
+    Clear All Data
   </button>
+
+</div>
+
+<script>
+
+let customers =
+  JSON.parse(localStorage.getItem("financeCustomers") || "[]");
+
+function saveData(){
+  localStorage.setItem(
+    "financeCustomers",
+    JSON.stringify(customers)
+  );
+}
+
+function addCustomer(){
+
+  let name = document.getElementById("name").value.trim();
+
+  if(name === ""){
+    alert("Customer name टाका.");
+    return;
+  }
+
+  let customer = {
+    id: Date.now(),
+    name: name,
+    mobile: document.getElementById("mobile").value,
+    pending: Number(document.getElementById("pending").value || 0),
+    promise: Number(document.getElementById("promise").value || 0),
+    date: document.getElementById("date").value,
+    status: document.getElementById("status").value
+  };
+
+  customers.push(customer);
+  saveData();
+
+  document.getElementById("name").value="";
+  document.getElementById("mobile").value="";
+  document.getElementById("pending").value="";
+  document.getElementById("promise").value="";
+  document.getElementById("date").value="";
+  document.getElementById("status").value="Pending";
+
+  showCustomers();
+
+  alert("Customer successfully saved!");
+}
+
+function deleteCustomer(id){
+
+  if(confirm("हा customer delete करायचा आहे का?")){
+
+    customers =
+      customers.filter(c => c.id !== id);
+
+    saveData();
+    showCustomers();
+  }
+}
+
+function formatMoney(amount){
+  return "₹" + Number(amount).toLocaleString("en-IN");
+}
+
+function showCustomers(){
+
+  let search =
+    document.getElementById("search").value
+    .toLowerCase();
+
+  let list =
+    document.getElementById("customerList");
+
+  list.innerHTML="";
+
+  let filtered =
+    customers.filter(c =>
+      c.name.toLowerCase().includes(search) ||
+      c.mobile.includes(search)
+    );
+
+  filtered.forEach(c => {
+
+    list.innerHTML += `
+      <div class="card customer">
+
+        <h3>👤 ${escapeHTML(c.name)}</h3>
+
+        <div class="info">
+          📞 Mobile: ${escapeHTML(c.mobile || "-")}
+        </div>
+
+        <div class="info">
+          💰 Pending: <b>${formatMoney(c.pending)}</b>
+        </div>
+
+        <div class="info">
+          💵 Promise: <b>${formatMoney(c.promise)}</b>
+        </div>
+
+        <div class="info">
+          📅 Promise Date: ${c.date || "-"}
+        </div>
+
+        <div class="status">
+          📌 ${escapeHTML(c.status)}
+        </div>
+
+        <button class="delete"
+          onclick="deleteCustomer(${c.id})">
+          DELETE
+        </button>
+
+      </div>
+    `;
+  });
+
+  updateSummary();
+}
+
+function updateSummary(){
+
+  document.getElementById("totalCustomers")
+    .innerText = customers.length;
+
+  let pending =
+    customers.reduce((sum,c) =>
+      sum + Number(c.pending || 0),0);
+
+  let promise =
+    customers.reduce((sum,c) =>
+      sum + Number(c.promise || 0),0);
+
+  document.getElementById("totalPending")
+    .innerText = formatMoney(pending);
+
+  document.getElementById("totalPaid")
+    .innerText = formatMoney(promise);
+}
+
+function clearAll(){
+
+  if(customers.length === 0){
+    alert("Data नाही.");
+    return;
+  }
+
+  if(confirm("सगळे customer records delete करायचे आहेत का?")){
+
+    customers=[];
+    saveData();
+    showCustomers();
+  }
+}
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+showCustomers();
+
+</script>
 
 </body>
 </html>
