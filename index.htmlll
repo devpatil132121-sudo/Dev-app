@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>RandomCall X</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1120;
+  color: #f8fafc;
+}
+
+header {
+  padding: 24px 18px;
+  background: linear-gradient(135deg, #172554, #312e81);
+  border-radius: 0 0 24px 24px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 27px;
+}
+
+header p {
+  color: #cbd5e1;
+  margin-bottom: 0;
+}
+
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 16px;
+}
+
+.balance {
+  margin-top: 18px;
+  padding: 20px;
+  background: #172033;
+  border: 1px solid #334155;
+  border-radius: 18px;
+}
+
+.balance h2 {
+  margin: 0 0 8px;
+  font-size: 19px;
+}
+
+.balance p {
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.card {
+  background: #172033;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 17px 13px;
+}
+
+.icon {
+  font-size: 27px;
+}
+
+.card h3 {
+  margin: 12px 0 6px;
+  font-size: 16px;
+}
+
+.card p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.section {
+  margin-top: 22px;
+  padding: 18px;
+  background: #172033;
+  border: 1px solid #334155;
+  border-radius: 18px;
+}
+
+h2 {
+  font-size: 19px;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0;
+  background: #0b1120;
+  color: white;
+  border: 1px solid #475569;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 9px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #334155;
+}
+
+button.call {
+  background: #15803d;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #a5b4fc;
+  outline-offset: 2px;
+}
+
+.entry {
+  padding: 12px 0;
+  border-bottom: 1px solid #334155;
+  overflow-wrap: anywhere;
+}
+
+.entry:last-child {
+  border-bottom: none;
+}
+
+.small {
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+footer {
+  padding: 24px 10px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📞 RandomCall X</h1>
+  <p>Business Calling & Customer Manager</p>
+</header>
+
+<main>
+
+  <div class="balance">
+    <h2>Welcome to RandomCall X</h2>
+    <p>तुमच्या बिझनेस कॉल्स आणि ग्राहकांच्या नोंदी एकाच ठिकाणी व्यवस्थापित करा.</p>
+    <p>🟢 Prototype Mode — Free</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="icon">📞</
